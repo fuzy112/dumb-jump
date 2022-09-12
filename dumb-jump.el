@@ -2055,11 +2055,13 @@ for user to select.  Filters PROJ path from files for display."
   "Keep looking at the parent dir of FILEPATH until a denoter file/dir is found."
   (s-chop-suffix
    "/"
-   (expand-file-name
-    (or
-     dumb-jump-project
-     (locate-dominating-file filepath #'dumb-jump-get-config)
-     dumb-jump-default-project))))
+   (let ((path (or
+                dumb-jump-project
+                (locate-dominating-file filepath #'dumb-jump-get-config)
+                dumb-jump-default-project)))
+     (if path
+         (expand-file-name path)
+       nil))))
 
 (defun dumb-jump-get-config (dir)
   "If a project denoter is in DIR then return it, otherwise
